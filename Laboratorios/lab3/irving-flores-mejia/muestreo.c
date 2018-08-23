@@ -1,7 +1,7 @@
 #include<stdio.h>
-#include"archivos.h"
-#include"procesamiento.h"
-#include"defs.h"
+#include "archivos.h"
+#include "procesamiento.h"
+#include "defs.h"
 
 int main ()
 {
