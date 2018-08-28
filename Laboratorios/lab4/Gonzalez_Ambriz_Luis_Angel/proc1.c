@@ -14,13 +14,13 @@ int main(int argc, char const *argv[])
 		printf("Soy hijo ejecutando con pid = %d\n",getpid());
 		suma=num1+num2;
 		printf("La suma es =%f\n",suma);
-		sleep(12);
+		//sleep(12);
 		exit(0);
 	}
 	else 
 	{
-		//sleep(5);
-		wait(getpid);
+		sleep(5);
+		//wait(getpid);
 		printf("Soy padre ejecutando con pid = %d\n",getppid());
 		resta=num1-num2;
 		printf("La resta es =%f\n",resta);
