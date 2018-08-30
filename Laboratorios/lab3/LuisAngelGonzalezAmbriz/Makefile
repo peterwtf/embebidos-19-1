@@ -8,17 +8,14 @@ CC=gcc
 
 all: $(PROYECTO)
 
-
 $(PROYECTO): $(comodin)
-	echo "Aqui me encuentro con $(comodin)"
 	$(CC) $^ -o $@ $(LDFLAGS)
-
 
 .PHONY: clean
 
 install: all
-	if [ ! -d $(DESTDIR) ]; then \
-		sudo mkdir $(DESTDIR); \
+	if [ ! -d $(DESTDIR) ] ; then \
+		sudo mkdir $(DESTDIR) ; \
 	fi; \
 	sudo cp $(PROYECTO) $(DESTDIR)
 
