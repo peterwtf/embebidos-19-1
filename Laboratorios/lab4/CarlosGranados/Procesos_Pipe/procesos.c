@@ -9,7 +9,7 @@
 #include "datos.h"
 
 void procesoPadre(int pipefd[]){
-	int np, npc, numero;
+	int np, npc, numero, numOrdena[N];
 	pid_t pid_hijo;
 
 	printf("Proceso padre ejecutado con pid %d\n", getpid());
@@ -20,23 +20,27 @@ void procesoPadre(int pipefd[]){
 		
 		pid_hijo = wait(&npc);
 		npc = npc >> 8;
-		read(pipefd[0], &numero, sizeof(int));
 
 		switch(npc){
 			case 0:
+				read(pipefd[0], &numero, sizeof(int));
 				printf("Proceso hijo %d terminado con pid: %d y mayor %d \n", npc, pid_hijo, numero);
 				break;
 
 			case 1:
+				read(pipefd[0], &numero, sizeof(int));
 				printf("Proceso hijo %d terminado con pid: %d y menor %d \n", npc, pid_hijo, numero);
 				break;
 
 			case 2:
+				read(pipefd[0], &numero, sizeof(int));
 				printf("Proceso hijo %d terminado con pid: %d y promedio %d \n", npc, pid_hijo, numero);
 				break;
 
 			case 3:
+				read(pipefd[0], numOrdena, sizeof(int)*N);
 				printf("Proceso hijo %d terminado con pid: %d\n", npc, pid_hijo);
+				imprimirArreglo(numOrdena);
 				break;
 
 			default:
@@ -88,7 +92,7 @@ void procesoHijo(int np, int *datos, int pipefd[]){
 
 		case 3:
 			ordenaArreglo(datos);
-			imprimirArreglo(datos);
+			write(pipefd[1], datos, sizeof(int)*N);
 			close(pipefd[1]);
 
 			exit(np);

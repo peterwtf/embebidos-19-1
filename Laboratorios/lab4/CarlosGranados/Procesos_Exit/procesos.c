@@ -18,7 +18,7 @@ void procesoPadre()
 	for (np=0; np<NUM_PROC;np++)
 	{
 		pid_hijo=wait(&numero);
-		printf("Proceso hijo terminado con pid: %d\n y retorno %d \n", pid_hijo, numero>>8);
+		printf("Proceso hijo terminado con pid: %d y retorno %d \n", pid_hijo, numero>>8);
 	}
 	
 }
