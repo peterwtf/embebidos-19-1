@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/wait.h>
-#define N 64
+#define N 32
 #define NUM_PROC 4
 
 int *A,*B,*C;
@@ -18,12 +18,12 @@ int menorArreglo( int datos[] );
 void ordenarArreglo( int datos[] );
 int promedioArreglo( int datos[] );
 
-void proceso_hijo( int np, int datos[], int pipefd[] );
-void proceso_padre( int pipefd[]  );
+void proceso_hijo( int np, int pipefd[] );
+void proceso_padre( int pipefd[NUM_PROC][2]  );
 
 int main(){
-	int *datos;
-	int pipefd[2], edo_pipe;
+//	int *datos;
+	int pipefd[NUM_PROC][2], edo_pipe;
 	
 	A=reservarMemoria();
 	llenarArreglo(A);
@@ -35,25 +35,25 @@ int main(){
 	imprimirArreglo(B);
 	C=reservarMemoria();
 
+		pid_t pid;
 
 	printf("PRobando procesos\n");
 	
 
 
 
-	edo_pipe = pipe(pipefd);
 
-	
-	if( edo_pipe == -1 ){
-		perror("Error al crear el pipe\n");
-		exit(EXIT_FAILURE);
-	}
 
-	pid_t pid;
         register int np;
 
         for(np = 0; np < NUM_PROC; np++ ){
+        		edo_pipe = pipe(&pipefd[np][0]);
 
+	
+				if( edo_pipe == -1 ){
+					perror("Error al crear el pipe\n");
+					exit(EXIT_FAILURE);
+				}
                 pid = fork();
 
                 if( pid == -1){
@@ -62,92 +62,61 @@ int main(){
                 }
 
                 if( !pid ){
-                        proceso_hijo( np, datos, pipefd );
+                        proceso_hijo( np, &pipefd[np][0] );
                 }
         }
 
         proceso_padre( pipefd );
 
-
-	free(datos);
+        imprimirArreglo(C);
+		free(A);
+		free(B);
+		free(C);
 	return 0;
 }
 
 
-void proceso_hijo( int np, int datos[], int pipefd[] ){
+void proceso_hijo( int np, int pipefd[] ){
+	register int i;
+	int tambloque= N/NUM_PROC;
+	int iniBloque=np*tambloque;
+	int finbloque=iniBloque+tambloque;
 
-	int mayor, menor;
-	int promedio;
+
+
 	printf("\t>>> Proceso hijo %d con pid %d <<<\n\n", np, getpid());
+	close(pipefd[0]);
+	for(i=iniBloque;i< finbloque;i++)
+	{
 
-	close( pipefd[0] );
+		C[i]=A[i]*B[i];
 
-	if( np == 0 ){
-		mayor = mayorArreglo( datos );
-		write( pipefd[1], &mayor, sizeof(int));
-		close(pipefd[1]);
 	}
-	else if( np == 1 ){
-		menor = menorArreglo( datos );
-		write( pipefd[1], &menor, sizeof(int));
-		close(pipefd[1]);
-	}
-	else if( np == 2 ){
-		promedio = promedioArreglo( datos );
-		write( pipefd[1], &promedio, sizeof(int));
-		close(pipefd[1]);
-	}
-	else if( np == 3 ){
-		ordenarArreglo( datos );
-		write( pipefd[1], datos, sizeof(int)*N);
-		close(pipefd[1]);
-	}
+	write( pipefd[1] , C+iniBloque , sizeof(int)*tambloque );
+	close(pipefd[1]);
 	exit( np );
 }
 
-void proceso_padre( int pipefd[] ){
+void proceso_padre( int pipefd[NUM_PROC][2] ){
         register int np;
-        int pid, resultado, proc;
-	int *resultado2;
+        int npc,tambloque=N/NUM_PROC,iniBloque;
+        pid_t pid_hijo;
 
         printf("Proceso padre con pid %d\n", getpid());
-		close( pipefd[1] );
+		
         for( np = 0; np < NUM_PROC; np++){
-          pid = wait( &proc );
-        
-         if(proc >> 8 ==0)
-         {
-	
-			read( pipefd[0], &resultado, sizeof(int) );
-			printf("Proceso hijo con id %d con pid %d y numero mayor =  %d  \n\n", proc>>8 , pid, resultado);
-		
-         }
-         else if(proc >> 8 ==1)
-         {
-	
-			read( pipefd[0], &resultado, sizeof(int) );
-			printf("Proceso hijo con id %d con pid %d y numero menor =  %d  \n\n", proc>>8 , pid, resultado);
-		
-         }
-         if(proc >> 8 ==2)
-         {
-	
-			read( pipefd[0], &resultado, sizeof(int) );
-			printf("Proceso hijo con id %d con pid %d y promedio =  %d  \n\n", proc>>8 , pid, resultado);
-		
-         }
+          close( pipefd[np][1]);
+          pid_hijo = wait( &npc );
+          npc=npc>>8;
+          iniBloque=npc*tambloque;
+          read(pipefd[np][0],C+iniBloque,sizeof(int)*tambloque);
+          printf("Procose hijo %d terminado con pid %d\n",npc,pid_hijo );
+        	
 
-
-		if((proc>>8) == 3){
-			resultado2 = reservarMemoria();
-			read( pipefd[0], resultado2, sizeof(int)*N );
-			printf("Proceso hijo con pid %d ordenando\n\n", pid);
-			imprimirArreglo(resultado2);
-			free(resultado2);
-		}
+     	
+	close( pipefd[np][0]);    
 		
 	}
-	close( pipefd[0] );
 }
 
 void ordenarArreglo( int datos[] ){
@@ -209,15 +178,16 @@ void imprimirArreglo( int datos[] ){
         for( n = 0; n < N; n++){
 		if( !(n % 16))
 			printf("\n");
-        	printf("%4.d ", datos[n]);
+        	printf("%5d ", datos[n]);
         }
 	printf("\n");
 }
 
 void llenarArreglo( int datos[] ){
         register int n;
+        //srand(getpid());
         for( n = 0; n < N; n++){
-                datos[n] = rand() % 4096;
+                datos[n] = rand() % 255;
         }
 }
 
