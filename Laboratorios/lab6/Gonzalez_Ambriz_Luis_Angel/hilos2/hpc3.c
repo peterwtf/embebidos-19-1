@@ -1,28 +1,30 @@
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
+#include <sys/types.h>
 #include <unistd.h>
-#define NUM_HILOS 4
-#define N 64 //Con números grandes hay problemas con la sinconía pero 
+#include <stdlib.h>
+#include <sys/wait.h>
+#define N 64
+#define NUM_PROC 4
 
-//programa para crear muchos hilos
 int *A,*B,*C;
 
-int * reservarMemoria();
-void llenarArreglo(int *datos);
-void imprimirArreglo(int *datos);
-void * funHilo(void *arg);
-//pthread_mutex_t bloqueo;
+int * reservarMemoria( void );
 
-//int contador;
+void imprimirArreglo( int datos[]);
+void llenarArreglo( int datos[]);
+
+int mayorArreglo( int datos[] );
+int menorArreglo( int datos[] );
+void ordenarArreglo( int datos[] );
+int promedioArreglo( int datos[] );
+
+void proceso_hijo( int np, int datos[], int pipefd[] );
+void proceso_padre( int pipefd[]  );
 
 int main(){
-	pid_t pid;
-	int np;
-	int pipefd[2],pipe_status;
-
-
+	int *datos;
+	int pipefd[2], edo_pipe;
+	
 	A=reservarMemoria();
 	llenarArreglo(A);
 	imprimirArreglo(A);
@@ -35,14 +37,22 @@ int main(){
 
 
 	printf("PRobando procesos\n");
-	pipe_status=pipe(pipefd):
-	if(pipe_status == -1)
-	{
-		perror("Error al crear la tuberia...\n");
+	
+
+
+
+	edo_pipe = pipe(pipefd);
+
+	
+	if( edo_pipe == -1 ){
+		perror("Error al crear el pipe\n");
 		exit(EXIT_FAILURE);
 	}
 
-	for(np = 0; np < NUM_PROC; np++ ){
+	pid_t pid;
+        register int np;
+
+        for(np = 0; np < NUM_PROC; np++ ){
 
                 pid = fork();
 
@@ -60,305 +70,168 @@ int main(){
 
 
 	free(datos);
-
-
-
-	//contador = 0;
-
-	//Se agregó para tener exclusión mutua; Se inicializa en el proceso padre una vez
-	//pthread_mutex_init(&bloqueo, NULL);
-	
-	printf("Probando hilos...\n");
-
-/*
-	datos = reservarMemoria();
-	llenarArreglo(datos);
-	imprimirArreglo(datos);
-*/
-	for (nh = 0; nh < NUM_HILOS; nh++)
-	{
-		nhs[nh] = nh;
-		pthread_create(&tids[nh], NULL, funHilo, (void *)&nhs[nh]);
-	}
-	
-	for (nh = 0; nh < NUM_HILOS; nh++)
-	{
-		pthread_join(tids[nh], (void **)&res);
-		printf("Hilo %d terminado\n", *res);
-	}
-	imprimirArreglo(C);
-	free(A);
-	free(B);
-	free(C);
-	//pthread_mutex_destroy(&bloqueo);
-
 	return 0;
 }
 
 
-void * funHilo(void *arg){
-	register int i = 0;
-	int nh = *(int*) arg;
+void proceso_hijo( int np, int datos[], int pipefd[] ){
 
+	int mayor, menor;
+	int promedio;
+	printf("\t>>> Proceso hijo %d con pid %d <<<\n\n", np, getpid());
 
+	close( pipefd[0] );
 
-	printf("Iniciando hilo %d \n", nh);
-	for (i = nh; i < N; i+=NUM_HILOS)
-	{
-
-		C[i]=A[i]*B[i];
+	if( np == 0 ){
+		mayor = mayorArreglo( datos );
+		write( pipefd[1], &mayor, sizeof(int));
+		close(pipefd[1]);
 	}
+	else if( np == 1 ){
+		menor = menorArreglo( datos );
+		write( pipefd[1], &menor, sizeof(int));
+		close(pipefd[1]);
+	}
+	else if( np == 2 ){
+		promedio = promedioArreglo( datos );
+		write( pipefd[1], &promedio, sizeof(int));
+		close(pipefd[1]);
+	}
+	else if( np == 3 ){
+		ordenarArreglo( datos );
+		write( pipefd[1], datos, sizeof(int)*N);
+		close(pipefd[1]);
+	}
+	exit( np );
+}
 
+void proceso_padre( int pipefd[] ){
+        register int np;
+        int pid, resultado, proc;
+	int *resultado2;
 
-
-	//Se agregó esto para crear una zona crítica y que los demás hilos no puedan acceder a ella mientras uno la esté ocupando
-	//pthread_mutex_lock(&bloqueo);
-	//contador++;	
+        printf("Proceso padre con pid %d\n", getpid());
+		close( pipefd[1] );
+        for( np = 0; np < NUM_PROC; np++){
+          pid = wait( &proc );
+        
+         if(proc >> 8 ==0)
+         {
 	
-	//while(--i); //Para que sea reentrante
-	//sleep(5);	//Es no reentrante
-	printf("Terminando hilo %d \n", nh);
+			read( pipefd[0], &resultado, sizeof(int) );
+			printf("Proceso hijo con id %d con pid %d y numero mayor =  %d  \n\n", proc>>8 , pid, resultado);
+		
+         }
+         else if(proc >> 8 ==1)
+         {
+	
+			read( pipefd[0], &resultado, sizeof(int) );
+			printf("Proceso hijo con id %d con pid %d y numero menor =  %d  \n\n", proc>>8 , pid, resultado);
+		
+         }
+         if(proc >> 8 ==2)
+         {
+	
+			read( pipefd[0], &resultado, sizeof(int) );
+			printf("Proceso hijo con id %d con pid %d y promedio =  %d  \n\n", proc>>8 , pid, resultado);
+		
+         }
 
-	//pthread_mutex_unlock(&bloqueo);
 
-	pthread_exit(arg);
-}
-
-// *Ap : Contenido de Ap
-//Con el cast se conoce los bytes que tiene que obtener a partir de la dirección de Ap
-
-int * reservarMemoria(){
-	int *mem;
-
-	mem = (int *) malloc(sizeof(int)*N);
-	if(!mem){
-		perror("Error al asignar memoria...\n");
-		exit(EXIT_FAILURE);
+		if((proc>>8) == 3){
+			resultado2 = reservarMemoria();
+			read( pipefd[0], resultado2, sizeof(int)*N );
+			printf("Proceso hijo con pid %d ordenando\n\n", pid);
+			imprimirArreglo(resultado2);
+			free(resultado2);
+		}
+		
 	}
+	close( pipefd[0] );
+}
 
-	return mem;
+void ordenarArreglo( int datos[] ){
+	register int n, m;
+	int aux;
+
+  	for ( n = 0; n < N; n++){
+   		for ( m = 0; m < (N - n - 1); m++){
+      			if (datos[m] > datos[m+1]){
+       				aux = datos[m];
+        			datos[m]   = datos[m+1];
+        			datos[m+1] = aux;
+      			}
+    		}
+  	}
+}
+
+int promedioArreglo( int datos[] ){
+	register int n;
+   	int suma = 0;
+	int  promedio;
+
+        for( n = 0; n < N; n++){
+		suma += datos[n];
+        }
+
+	promedio = suma/N;
+        return promedio;
+}
+
+int menorArreglo( int datos[] ){
+        register int n;
+        int menor;
+        menor = datos[0];
+        for( n = 0; n < N; n++){
+                if( datos[n] < menor){
+                        menor = datos[n];
+                }
+        }
+        return menor;
 }
 
 
-void llenarArreglo(int *datos){
-	register int i;
-
-	srand(getpid()); //Semilla para generar random del número de proceso
-
-	for(i = 0; i < N; i++){
-		datos[i] = rand() % 255;
-	}
-}
-
-
-void * mayorArreglo(void *arg){
-	register int i;
-	static int mayor;
-	int *datos = (int*) arg;
-
+int mayorArreglo( int datos[] ){
+	register int n;
+	int mayor;
 	mayor = datos[0];
 
-	for(i = 1; i < N; i++){
-		if(datos[i]>mayor)
-			mayor = datos[i];
-	}
-
-	pthread_exit((void*) &mayor);
+	for( n = 0; n < N; n++){
+                if( datos[n] > mayor){
+			mayor = datos[n];
+		}
+        }
+	return mayor;
 }
 
-void * menorArreglo(void *arg){
-	register int i;
-	static int menor;
-	int *datos = (int*) arg;
-
-	menor = datos[0];
-
-	for(i = 1; i < N; i++){
-		if(datos[i]<menor)
-			menor = datos[i];
-	}
-
-	pthread_exit((void *) &menor);
-}
-
-void imprimirArreglo(int *datos){
-	register int i;
-
-	for(i = 0; i < N; i++){
-
-		if(!(i%16))
+void imprimirArreglo( int datos[] ){
+	register int n;
+        for( n = 0; n < N; n++){
+		if( !(n % 16))
 			printf("\n");
-
-		printf("%3d ", datos[i]);
-	}
+        	printf("%4.d ", datos[n]);
+        }
 	printf("\n");
 }
 
-
-
-/*#include<stdio.h>
-#include<stdlib.h>
-#include<pthread.h>
-#include<unistd.h>
-#define NUM_HILOS 4
-#define N 32
-
-void * suma( void * arg);
-void * resta( void * arg);
-void * multi( void * arg);
-void * divi( void * arg);
-
-
-int *A,*B,*C;
-
-
-
-int * reservarmemoria();
-void llenararreglo(int * datos);
-void imprimirarreglo(int *datos);
-void producto(void );
-
-
-int num=12,num2=12;
-int main()
-{
-	A=reservarmemoria();
-	llenararreglo(A);
-	imprimirarreglo(A);
-
-
-	B=reservarmemoria();
-	llenararreglo(B);
-	imprimirarreglo(B);
-
-
-	C=reservarmemoria();
-
-	producto();
-	imprimirarreglo(C);
-	free(A);
-	free(B);
-	free(C);
-
-
-
-
-
-
-
-
-
-
-	return 0;
-
+void llenarArreglo( int datos[] ){
+        register int n;
+        for( n = 0; n < N; n++){
+                datos[n] = rand() % 4096;
+        }
 }
 
-void * suma(void * arg){
-
-	int *res=(int *)malloc(sizeof(int));
-	*res=num+num2;
-	pthread_exit((void*)  res);
-
-}
-
-
-
-void * resta(void * arg){
-
-
-	int *res=(int *)malloc(sizeof(int));
-	*res=num-num2;
-	pthread_exit((void*)  res);
-	
-}
-
-void * multi(void * arg){
-
-
-	static int res;
-	res=num*num2;
-	pthread_exit((void*)  &res);
-
-	
-}
-
-void * divi(void * arg){
-
-	static int res;
-	res=num/num2;
-	pthread_exit((void*)  &res);
-
-	
-}
-
-
-
-void llenararreglo(int *datos)
-{
-	register int i;
-	srand(getpid());
-	for ( i = 0; i <N; i++)
-	{
-		datos[i]=rand()%255;
-	}
-}
-
-
-int * reservarmemoria()
-{
-
+int * reservarMemoria( void ){
 	int *mem;
-	mem=(int *) malloc(sizeof(int) * N);
-	if( !mem)
-	{
-		perror("Error al asignar memoria ... \n");
+	mem = (int *)malloc( sizeof(int)*N );
+	if( !mem ){
+		perror("Error al asignar memoria\n\n");
 		exit(EXIT_FAILURE);
 	}
 	return mem;
-
-
 }
 
 
 
-void producto(void )
-{
-	register int i;
-	for (i = 0; i < N; i++)
-	{	
-		C[i]=A[i]*B[i];
-	}
-}
-
-
-
-void imprimirarreglo(int *datos)
-{
-	register int i;
-	for (i = 0; i < N; i++)
-	{
-		if(!(i%8))
-		{
-			printf("\n");
-		}
-		printf("%3d ", datos[i]);
-
-	}
-	printf("\n\n");
-}
-
-
-
-
-
-
-
-
-*/
-/*
-
- Formas de guardas valores es :
- 	- Reservar memoria en malloc
- 	- Reservar una variable usamos el static 
-
-*/
+//Dos modulos mas, ordenar (burbuja) y promedio, un proceso para cada tareita (4)
+//Para el viernes entregarlo en lab
