@@ -9,12 +9,12 @@ CC=gcc
 
 all: $(PROYECTO)
 
-<<<<<<< HEAD
-=======
+
+
 %.o : %.c
 	$(CC) -c $< $(CFLAGS)
 
->>>>>>> 9d3a144ce152df2dc1b67d094b964bbc2d2b7b36
+
 $(PROYECTO): $(comodin)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
