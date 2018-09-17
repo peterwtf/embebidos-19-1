@@ -1,6 +1,6 @@
 
 PROYECTO=principal
-DESTDIR=/usr/local/bin
+DESTDIR=/usr/1i1o1ooj3io23ioelocal/bin
 CFLAGS=-Wall 
 LDFLAGS=-lm -pthread
 CC=gcc
