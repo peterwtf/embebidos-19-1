@@ -1,10 +1,10 @@
 # Archivo Makefile simple
 
-PROYECTO=proc
+PROYECTO=hpc
 objects := $(patsubst %.c,%.o,$(wildcard *.c))
 DESTDIR=/usr/local/bin
 CFLAGS=-Wall
-LDFLAGS=-lm
+LDFLAGS=-lm -lpthread
 CC=gcc
 
 all: $(PROYECTO)
