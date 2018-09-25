@@ -79,7 +79,13 @@ unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t hei
 			indiceGray = y * width + x; //Para desplazarse en el arreglo
 			indiceRGB = indiceGray * 3; //por que cada pixel ocupa 3 bytes
 
-			grayLevel = (imagenRGB[indiceRGB] + imagenRGB[indiceRGB+1] + imagenRGB[indiceRGB+2]) / 3;
+			//Utilizando un método de iluminación ponderado. Cada color tiene diferente longitud de onda y por lo tanto se ponderan los valores de R G B para tener un balance.
+			// 0.3 R, 0.59 G, 0.11 B
+			// Pero para no enviar al coprocesador matemático se utiliza en forma entera como:
+			// 30 R, 59 G, 11 B y luego entre 100, de esta manera manejamos numeros enteros
+			grayLevel = (30 * imagenRGB[indiceRGB] + 
+						59 * imagenRGB[indiceRGB+1] + 
+						11 * imagenRGB[indiceRGB+2]) / 100;
 
 			imagenGray[indiceGray] = grayLevel;
 		}
