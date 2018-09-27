@@ -7,6 +7,7 @@
 
 void GraytoRGB(unsigned char *imagenGray, unsigned char *imagenRGB, uint32_t width, uint32_t height);
 unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t height);
+void brilloImagen(unsigned char *imagenGray, uint32_t width, uint32_t height);
 
 int main(){
 	
@@ -15,19 +16,20 @@ int main(){
 
 
 	//Abrir imagen
-	imagenRGB = abrirBMP("../img/hoja.bmp", &info);
+	imagenRGB = abrirBMP("../img/dark_forest3.bmp", &info);
 	displayInfo(&info);
 
 	//Convertir a nivel de gris
 	imagenGray = RGBtoGray(imagenRGB, info.width, info.height);
 
 	//procesamiento...
+	brilloImagen(imagenGray, info.width, info.height);
 
 	//Para guardar una imagen otra vez en RGB, se pone el mismo valor de nivel de gris en los tres componentes (R, G, B), quedando en formato RGB pero en escala de grises. Se regresa al formato RGB para que el visor pueda reconocerlo. Se puede modificar la cabezera para indicar que cada pixel es de 1 byte.
 	GraytoRGB(imagenGray, imagenRGB, info.width, info.height);
 
 	//Guardar imagen en escala de grises
-	guardarBMP("hojaGray.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
+	guardarBMP("dark_forestNG_brillo.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
 
 	free(imagenRGB);
 	free(imagenGray);
@@ -92,6 +94,17 @@ unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t hei
 	}
 
 	return imagenGray;
+}
+
+void brilloImagen(unsigned char *imagenGray, uint32_t width, uint32_t height){
+	register int p;
+	unsigned short int pixel;
+
+	//Otra manera de recorrer los pixeles, recorriendo el arreglo lineal
+	for(p = 0; p < width*height; p++){
+		pixel = imagenGray[p] + 80; //Se suma una constante para aumentar el brillo
+		imagenGray[p] = (pixel > 255)?255:pixel; //Operador ternario, se debe comparar porque se va a almacenar máximo 255, por lo que si al sumar la constante excede el 255, se debe guardar 255
+	}
 }
 
 /*
