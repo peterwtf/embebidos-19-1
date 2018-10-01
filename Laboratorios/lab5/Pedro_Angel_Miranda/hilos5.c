@@ -11,13 +11,17 @@ void imprimirArreglo( int *datos );
 void * mayorArreglo( void *arg );
 void * menorArreglo( void *arg );
 */
+void * funHilo (void *arg);
 
+pthread_mutex_t bloqueo;
+int contador;
 int main()
 {
 	int nhs[NUM_HILOS], *res;
     register int nh;
 	pthread_t tids[NUM_HILOS];
-
+contador =0;
+pthread_mutex_init( &bloqueo,NULL);
 	printf("Probando hilos ...\n");
 /*
         datos = reservarMemoria();
@@ -35,14 +39,21 @@ for (nh = 0; nh < NUM_HILOS; nh++)
     pthread_join(tids[nh],(void ** )&res);
     printf("Hilo %d terminado", *res);
 }
-
-return 0
+ pthread_mutex_destroy( &bloqueo);
+return 0;
 }
 
 void * funHilo (void *arg)
 {
-register int i;
+register int i=0;
 int nh = *(int *)arg;
+
+contador ++;
+printf("Iniciando Hilo %d con contador %d \n",nh, contador );
+while( (--i) );
+sleep(5);
+printf("Terminando Hilo %d con contador %d \n",nh, contador );
+pthread_mutex_unlock(&bloqueo);
 pthread_exit( arg );
 
 }
@@ -126,3 +137,6 @@ void imprimirArreglo( int *datos )
 }
 
 */
+
+
+//gcc hilo5.c -pnjpet -o hilo.c -Wall

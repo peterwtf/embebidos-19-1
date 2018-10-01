@@ -3,13 +3,14 @@
 #include<sys/types.h>
 #include<unistd.h>
 #include<sys/wait.h>
-#define NUM_PROC 2
+#define NUM_PROC 3
 #define N 32
 
 
 
 void procesoHIJO(int np,int *datos);
 void procesoPadre();
+float promedioArreglo(int *datos);
 
 int * reservarmemoria();
 void llenararreglo(int * datos);
@@ -75,7 +76,8 @@ void procesoHIJO(int np,int *datos)
 {
 	printf("procesos HIJO %d ejecutando con pid  %d\n",np,getpid());
 //	while(1);
-	int mayor,menor,promedio;
+   	float promedio;
+	int mayor,menor;
 	if(np == 0)
 	{
 		mayor=mayorArreglo(datos);
@@ -86,13 +88,12 @@ void procesoHIJO(int np,int *datos)
 		menor=menorArreglo(datos);
 		exit( menor );
 	}
-	// else if(np== 2)
-	// {
-	// 	//HACER EL PROMEDIO
-	// 	promedio=promedioArreglo( datos);
-	// 	exit(np);
-	// }
-	// else if (np == 3)
+	else if(np== 2)
+	{
+	    promedio = promedioArreglo(datos);
+	    exit(promedio);
+	}
+	//else if (np == 3)
 	// {
 	// 	//HACER EL ORDENAMIENTO DE EL ARREGLO
 	// 	promedio=ordenarArreglo( datos);
@@ -178,7 +179,18 @@ void imprimirarreglo(int *datos)
 	printf("\n\n");
 }
 
+float promedioArreglo(int *datos){
+	register int i, suma;
+	float prom;
 
+	for(i = 0; i < N; i++){
+		suma = suma + datos[i];
+	}
+
+	prom = suma/N;
+
+	return prom;
+}
 
 
 
