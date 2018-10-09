@@ -1,35 +1,44 @@
-//conversion.c Para convertir una imagen de RGB a escala de grises
+//conversion.c Detección de bordes con operador de Sobel
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "imagen.h"
+
+#define DIMASK 3
 
 void GraytoRGB(unsigned char *imagenGray, unsigned char *imagenRGB, uint32_t width, uint32_t height);
 unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t height);
 void brilloImagen(unsigned char *imagenGray, uint32_t width, uint32_t height);
+void filtroImagen(unsigned char *imagenGray, unsigned char *imagenFiltro, uint32_t width, uint32_t height);
+unsigned char * reservarMemoria(uint32_t width, uint32_t height);
 
 int main(){
 	
 	bmpInfoHeader info;
-	unsigned char *imagenRGB, *imagenGray;
+	unsigned char *imagenRGB, *imagenGray, *imagenFiltro;
 
 
 	//Abrir imagen
-	imagenRGB = abrirBMP("../img/dark_forest3.bmp", &info);
+	imagenRGB = abrirBMP("../img/calle1.bmp", &info);
 	displayInfo(&info);
 
 	//Convertir a nivel de gris
 	imagenGray = RGBtoGray(imagenRGB, info.width, info.height);
 
 	//procesamiento...
-	brilloImagen(imagenGray, info.width, info.height);
+
+	//brilloImagen(imagenGray, info.width, info.height);
+
+	imagenFiltro = reservarMemoria(info.width, info.height);
+	filtroImagen(imagenGray, imagenFiltro, info.width, info.height);
 
 	//Para guardar una imagen otra vez en RGB, se pone el mismo valor de nivel de gris en los tres componentes (R, G, B), quedando en formato RGB pero en escala de grises. Se regresa al formato RGB para que el visor pueda reconocerlo. Se puede modificar la cabezera para indicar que cada pixel es de 1 byte.
-	GraytoRGB(imagenGray, imagenRGB, info.width, info.height);
+	GraytoRGB(imagenFiltro, imagenRGB, info.width, info.height);
 
 	//Guardar imagen en escala de grises
-	guardarBMP("dark_forestNG_brillo.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
+	guardarBMP("calle1DB.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
 
 	free(imagenRGB);
 	free(imagenGray);
@@ -68,10 +77,10 @@ unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t hei
 	unsigned char *imagenGray;
 
 	//Arreglo a reservar para la nueva imagen
-	imagenGray = (unsigned char *) malloc(width * height * sizeof(unsigned char));
+	imagenGray = reservarMemoria(width, height);
 
 	if(imagenGray == NULL){
-		perror("Error al asignar memoria.\n");
+		perror("Error al asignar memoria.\n");	
 		exit(EXIT_FAILURE);
 	}
 
@@ -105,6 +114,69 @@ void brilloImagen(unsigned char *imagenGray, uint32_t width, uint32_t height){
 		pixel = imagenGray[p] + 80; //Se suma una constante para aumentar el brillo
 		imagenGray[p] = (pixel > 255)?255:pixel; //Operador ternario, se debe comparar porque se va a almacenar máximo 255, por lo que si al sumar la constante excede el 255, se debe guardar 255
 	}
+}
+
+unsigned char * reservarMemoria(uint32_t width, uint32_t height){
+	unsigned char *imagen;
+
+	//Arreglo a reservar para la nueva imagen
+	imagen = (unsigned char *) malloc(width * height * sizeof(unsigned char));
+
+	if(imagen == NULL){
+		perror("Error al asignar memoria.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	return imagen;
+}
+
+void filtroImagen(unsigned char *imagenGray, unsigned char *imagenFiltro, uint32_t width, uint32_t height){
+	register int x, y, xm, ym, indicem;
+	int conv1, conv2, indice; //Se tienen dos convoluciones poque se tienen dos máscaras de acuerdo al algoritmo para la detección de bordes
+
+	//Se utiliza una máscara de 3x3. Hay que convolucionar los valores de la imagen con los valores de la máscara
+
+	//Gradiente de fila de Sobel con K = 2
+	char GradF[] = 
+							{1, 0, -1,
+	 						 2, 0, -2,
+	 						 1, 0, -1};
+
+	//Gradiente de columna de Sobel con K = 2
+	char GradC[] = 
+							{-1, -2, -1,
+	 						 0, 0, 0,
+	 						 1, 2, 1};
+
+	//Se resta la dimensión de la máscara porque viéndolo como cuadrícula, se 
+	for(y = 0; y <= height-DIMASK; y++){
+		for(x = 0; x <= width-DIMASK; x++){ 
+			//Para recorrer la máscara
+			conv1 = 0;
+			conv2 = 0;
+			indicem = 0;
+
+			for(ym = 0; ym < DIMASK; ym++){
+				for(xm = 0; xm < DIMASK; xm++){
+					indice = (y+ym)*width+(x+xm);
+					
+					conv1 += imagenGray[indice] * GradF[indicem];
+					conv2 += imagenGray[indice] * GradC[indicem++];
+				}
+			}
+
+			conv1 = conv1 / 4; //se divide entre el coeficiente indicado por las máscaras
+			conv2 = conv2 / 4; //se divide entre el coeficiente indicado por las máscaras
+
+			//Ya que se tienen las dos convoluciones, hay que obtener el valor del vector (G(i,j)² = GF² + GC²) y esto dará el resultado de un pixel
+			int magnitud = sqrt(pow(conv1,2) + pow(conv2,2));
+			
+			indice = ((y+1)*width + (x+1));
+			imagenFiltro[indice] = magnitud;
+
+		}
+	}
+
 }
 
 /*
@@ -142,5 +214,6 @@ _NG | NG | NG | NG | NG | ...
 _
 
 NG (nivel de gris) = R + G + B / 3
+
 
 */
