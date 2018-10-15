@@ -10,6 +10,7 @@ _Que cosas necesitas para instalar el software y como instalarlas_
 
 ```
 ![alt text](https://github.com/MikeyMcDon/embebidos-19-1/14643-Raspberry_Pi_3_B_-05.jpg)
+![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
 ```
 
 ### Instalación 🔧
