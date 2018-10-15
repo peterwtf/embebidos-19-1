@@ -1,14 +1,14 @@
 
-Instituto Politécnico Nacional
-ESCOM
-Escuela Superior de Computo
+Instituto Politécnico Nacional [\n]
+ESCOM [\n]
+Escuela Superior de Computo [\n]
 
-Integrantes:
-García Cebada Jorge Miguel
-Amador Nava Miguel Ángel
+Integrantes: [\n]
+García Cebada Jorge Miguel [\n]
+Amador Nava Miguel Ángel [\n]
 
-Materia: Embedded Systems
-Profesor: Victor Hugo García Ortega
-Grupo: 3CV10
+Materia: Embedded Systems [\n]
+Profesor: Victor Hugo García Ortega [\n]
+Grupo: 3CV10 [\n]
 
 ![alt tag](rasp.jpg)
