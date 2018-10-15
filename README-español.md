@@ -214,20 +214,7 @@ Da un ejemplo
 * **López Rivera Aiko Dallane** - *Documentación* - [MikeyMcDon](https://github.com/MikeyMcDon)
 * **Maldonado Carpio Jorge Enrique** - *Documentación* - [JorgeEnrique12](https://github.com/JorgeEnrique12)
 
-```
-Da un ejemplo
-```
+## Victor Hugo García Ortega ❤️⌨️ 
 
-## 
-```
-Da un ejemplo
-```Victor Hugo García Ortega ❤️⌨️ 
+* **Profesor** [Victor Hugo García Ortega](https://github.com/vgarciaortega)
 
-* *
-```
-Da un ejemplo
-```*Profesor** [Victor Hugo García Ortega](https://github.com/vgarciaortega)
-
-```
-Da un ejemplo
-```
