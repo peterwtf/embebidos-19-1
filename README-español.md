@@ -1,16 +1,8 @@
 # INSTITUTO POLITÉCNICO NACIONAL 
 # ESCUELA SUPERIOR DE CÓMPUTO 
 
-_EMBEDDED SYSTEMS[\n]_ 
-_López Rivera Aiko Dallane_ [\n]
-_Maldonado Carpio Jorge Enrique_ [\n]
-
-## Comenzando 🚀
-
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
-
-Mira **Deployment** para conocer como desplegar el proyecto.
-
+## EMBEDDED SYSTEMS
+## _Reporte RaspberryPi 3_ 
 
 ### Pre-requisitos 📋
 
@@ -37,6 +29,11 @@ hasta finalizar
 ```
 
 _Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
+
+## RaspberryPi 3 como computadora de escritorio. 🚀
+
+_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
+
 
 ## Ejecutando las pruebas ⚙️
 
