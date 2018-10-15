@@ -1,6 +1,9 @@
-# Título del Proyecto
+# INSTITUTO POLITÉCNICO NACIONAL 
+# ESCUELA SUPERIOR DE CÓMPUTO 
 
-_Acá va un párrafo que describa lo que es el proyecto_
+_EMBEDDED SYSTEMS_
+_lópez Rivera Aiko Dallane_ 
+_Maldonado Carpio Jorge Enrique_ 
 
 ## Comenzando 🚀
 
