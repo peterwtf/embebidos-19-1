@@ -73,64 +73,69 @@ _SSH.  Secure  shell,  es  un  protocolo  de  red  que  permite  el  intercambio
 _$  sudo  systemctl  list-unit-files_
 
 ```
-Da un ejemplo
+Checamos la lista de servicios disponibles (SSH) y su estado 
 ```
 
 _$  sudo  systemctl  status  ssh_
 
 ```
-Da un ejemplo
+Ahora checamos el estado del servicio SSH 
 ```
 
 _$  sudo  systemctl  start  ssh_
 
 ```
-Da un ejemplo
+Al ver que no Esta activo lo iniciamos
 ```
 
 _$  sudo  systemctl  enable  ssh_
 
 ```
-Da un ejemplo
+Aqui lo habilitamos 
 ```
-
 _$  ifconfig_
 
 ```
-Da un ejemplo
+Determinamos el nombre de la interfaz de red y anotamos la dirección MAC. 
 ```
+```
+Con esto se termina esta parte
+```
+* ** Ahora vamos a pasar a nuestra computadora personal 
+
 
 _$  hostname  -I_
 
 ```
-Da un ejemplo
+Determinamos la derecci{on IP (192.168.0.24)
 ```
-_$  nmap  -p22  192.168.100.0/24_
+_$  nmap  -p22  192.168.0.0/24_
 
 ```
-Da un ejemplo
+Peguntar  por  las direcciones  IP  dentro  de  la  red  que  tengan  el  puerto  22  abierto,  este  puerto  es  el  del  SSH,  es decir,  vamos  a  hacer  un  mapeo  de  la  red  con  la  herramienta  nmap
 ```
 
 _$  arp  -v  |  grep  da:73_
 
 ```
-Da un ejemplo
+Ejecutamos  el  protocolo  de  resolución  de  direcciones  con  el  comando  ARP  y verificamos  contra  la  dirección  MAC  de  nuestra  tarjeta  RaspberryPi  3.  Podemos  filtrar  la búsqueda  con  el  comando  grep,  colocando  los  dos  últimos  bytes  de  la  dirección  MAC. 
 ```
 
-_$  ssh pi@192.168.100.13_
+_$  ssh pi@192.168.0.24_
 
 ```
-Da un ejemplo
+Ejecutamos la conexion SSH en nuestro caso, con usuario pi y contraseña raspberry  
 ```
 
 ```
-Da un ejemplo
+Finalmente inicia el sistema mediante SSH.
 ```
 
 ### Capturas de resultado 🔩
 
 ![alt tag](hostname.jpg)
 ![alt tag](ssh.jpg)
+* ** Entrar mediante SSH 
 
 ## RaspberryPi  3  mediante  VNC ⌨️
 
@@ -139,29 +144,37 @@ _VNC.  Virtual  Network  Computing,  es  un  programa  de  software  libre  basa
 _$  sudo  systemctl  list-unit-files_
 
 ```
-Da un ejemplo
+Checamos la lista de servicios disponibles (VNC) y su estado 
 ```
 
 _$  sudo  systemctl  status  vncserver-x11-serviced_
 
 ```
-Da un ejemplo
+Ahora checamos el estado del servicio SSH 
 ```
 _$  sudo  systemctl  start  vncserver-x11-serviced_
 
 ```
-Da un ejemplo
+Al ver que no Esta activo lo iniciamos
 ```
 _$  sudo  systemctl  enable  vncserver-x11-serviced_
 
 ```
-Da un ejemplo
+Aqui finalmente lo inicializamos 
 ```
-_$  sudo  apt-get  install  realvnc-vnc-viewer_
+Lo probamos con la aplicación VNC Viewer para MAC. 
 
 ```
-Da un ejemplo
+Finalmente inicia el sistema mediante VNC.
 ```
+
+### Capturas de resultado 🔩
+
+![alt tag](vnc.jpg)
+![alt tag](vncviewer.jpg)
+![alt tag](vncenter.jpg)
+* ** Entrar mediante VNC 
+
 ## RaspberryPi  3  mediante  Consola 📌
 
 _¿Qué  pasa  si  no  cuento  con  teclado,  monitor  y  ratón  para  usar  mi  tarjeta  Raspberry  comocomputadora  de  escritorio  y  tampoco  tengo  conexión  en  red  para  conectarme  con  SSH  o VNC?_
@@ -171,43 +184,48 @@ _Conectarnos  a  nuestra  tarjeta  Raspberry  mediante  UART_
 _$  sudo  nano /boot/config.txt_
 
 ```
-Da un ejemplo
+Habilitamos  el  mini-UART  de  la  tarjeta  RaspberryPi  3,  esto  lo  hacemos  en  el archivo  de  configuración  para  el  kernel
 ```
 _enable_uart=1 core_freq=250_
 
 ```
-Da un ejemplo
+Agregamos  al  final  las  sentencias  de  habilitación  del  mini-UART  y  la  configuración  de  su oscilador  de  250  Mhz  para  el  cálculo  de  la  velocidad  de  transmisión  en  baudios.
 ```
-_$  ls  -l  /dev/ttyUSB0_
+* ** Conetamos nuesto módulo a la Raspberry 
+![alt tag](terminal.JPG)
+
+_$  ls  -l  /dev/cu.usbserial-00000000_
 
 ```
-Da un ejemplo
+verificamos  el  nombre  del dispositivo  asignado
 ```
 _$  id_
 
 ```
-Da un ejemplo
+Verificamos que seamos parte del grupo dialout, para poder comunicarnos.
 ```
 _$  sudo  usermod  -a  -G  dialout  “$(whoami)”_
 
 ```
-Da un ejemplo
+Nos agregamos al grupo dialout 
 ```
-_$  screen  /dev/ttyUSB0  115200_
+_$  screen  /dev/cu.usbserial-00000000  115200_
 
 ```
-Da un ejemplo
+Se usa para conectar nuestra computadora personal con GNU screen, especificando a que dipositivo nos vamos a conectar y a que velocidad
 ```
 _$  sudo  reboot_
 
 ```
-Da un ejemplo
+Reiniciamos la raspberry. 
+```
+
+```
+Finalmente inicia el sistema mediante consola.
 ```
 ### Capturas del proceso 📦
-![alt tag](terminal.JPG)
 ![alt tag](dev115.jpg)
 ![alt tag](tty0.jpg)
-![alt tag](general.jpg)
 
 ## Autores ✒️
 
