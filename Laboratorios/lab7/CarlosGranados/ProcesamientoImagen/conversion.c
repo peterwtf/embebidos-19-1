@@ -1,11 +1,11 @@
-//conversion.c Para convertir una imagen de RGB a escala de grises
+//Utiliando el filtro Gaussiano
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "imagen.h"
 
-#define DIMASK 3
+#define DIMASK 5
 
 void GraytoRGB(unsigned char *imagenGray, unsigned char *imagenRGB, uint32_t width, uint32_t height);
 unsigned char * RGBtoGray(unsigned char *imagenRGB, uint32_t width, uint32_t height);
@@ -37,7 +37,7 @@ int main(){
 	GraytoRGB(imagenFiltro, imagenRGB, info.width, info.height);
 
 	//Guardar imagen en escala de grises
-	guardarBMP("huella1FPB.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
+	guardarBMP("huella1FGaussiano.bmp", &info, imagenRGB); //Se utiliza el mismo buffer de imagenRGB que ya estaba reservado
 
 	free(imagenRGB);
 	free(imagenGray);
@@ -134,10 +134,13 @@ void filtroImagen(unsigned char *imagenGray, unsigned char *imagenFiltro, uint32
 	int conv, indice;
 
 	//Se utiliza una máscara de 3x3. Hay que convolucionar los valores de la imagen con los valores de la máscara
+	//Utilizando el filtro Gaussiano
 	unsigned char mascara[] = 
-							{1, 1, 1,
-	 						 1, 1, 1,
-	 						 1, 1, 1};
+							{1,  4,  7,  4, 1,
+	 						 4, 16, 26, 16, 4,
+	 						 7, 26, 41, 26, 7,
+	 						 4, 16, 26, 16, 4,
+	 						 1,  4,  7,  4, 1,};
 
 	//Se resta la dimensión de la máscara porque viéndolo como cuadrícula, se 
 	for(y = 0; y <= height-DIMASK; y++){
@@ -153,7 +156,7 @@ void filtroImagen(unsigned char *imagenGray, unsigned char *imagenFiltro, uint32
 				}
 			}
 
-			conv = conv / 9; //se divide entre el número de elementos
+			conv = conv / 273; //Coeficiente dado por el filtro Gaussiano
 			indice = ((y+1)*width + (x+1));
 			imagenFiltro[indice] = conv;
 
