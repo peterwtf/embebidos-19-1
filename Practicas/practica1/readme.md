@@ -1,8 +1,8 @@
 En este subdirectorio deben crear una carpeta con el primer apellido de cada integrante del equipo.
 Ejemplo, Si los integrantes son:
 
-Juan Perez Perez
-Fernando Aguilar Sanchez
+Juan Perez Perez, 
+Fernando Aguilar Sanchez, 
 Nidia Cortez Duarte
 
 La carpeta debe llamarse:
