@@ -1,9 +1,9 @@
 # INSTITUTO POLITÉCNICO NACIONAL 
 # ESCUELA SUPERIOR DE CÓMPUTO 
 
-_EMBEDDED SYSTEMS_ [/n]
-_López Rivera Aiko Dallane_ [/n]
-_Maldonado Carpio Jorge Enrique_ [/n]
+_EMBEDDED SYSTEMS_ [\n]
+_López Rivera Aiko Dallane_ [\n]
+_Maldonado Carpio Jorge Enrique_ [\n]
 
 ## Comenzando 🚀
 
