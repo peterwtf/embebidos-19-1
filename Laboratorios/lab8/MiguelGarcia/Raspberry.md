@@ -60,7 +60,7 @@ $ sudo systemctl status vncserver-x11-serviced
 $ sudo systemctl start vncserver-x11-serviced  
 $ sudo systemctl enable vncserver-x11-serviced  
 
-![alt tag](5vncpu.png)  
+![alt tag](5vncpi.png)  
 
 En la computadora:  
   
