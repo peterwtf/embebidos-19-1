@@ -29,6 +29,9 @@ Para verificar la  lista  de  servicios  disponible  y  su  estado ejecutamos lo
 
 --sudo  systemctl  start  ssh
 
+
+![GitHub Logo](imagenes/2018-10-08-140329_640x480_scrot.png)
+
 --sudo  systemctl  enable  ssh
 
 Verifica  el  nombre  de  la  interfaz  de  red  inalámbrica  en  tu  raspberry  y  anota  la  dirección  MAC.Ejecuta  el  comando:
