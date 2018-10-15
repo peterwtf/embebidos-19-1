@@ -112,13 +112,21 @@ Determinamos la derecci{on IP (192.168.0.24)
 _$  nmap  -p22  192.168.0.0/24_
 
 ```
-Peguntar  por  las direcciones  IP  dentro  de  la  red  que  tengan  el  puerto  22  abierto,  este  puerto  es  el  del  SSH,  es decir,  vamos  a  hacer  un  mapeo  de  la  red  con  la  herramienta  nmap
+Peguntar  por  las direcciones  IP  dentro  de  la  red  que  tengan  el  puerto  22  abierto,  
+
+este  puerto  es  el  del  SSH,  es decir,  vamos  a  hacer  un  mapeo  de  la  red  con  la  herramienta 
+
+nmap
 ```
 
 _$  arp  -v  |  grep  da:73_
 
 ```
-Ejecutamos  el  protocolo  de  resolución  de  direcciones  con  el  comando  ARP  y verificamos  contra  la  dirección  MAC  de  nuestra  tarjeta  RaspberryPi  3.  Podemos  filtrar  la búsqueda  con  el  comando  grep,  colocando  los  dos  últimos  bytes  de  la  dirección  MAC. 
+Ejecutamos  el  protocolo  de  resolución  de  direcciones  con  el  comando  ARP  y verificamos 
+
+contra  la  dirección  MAC  de  nuestra  tarjeta  RaspberryPi  3.  Podemos  filtrar  la búsqueda 
+
+con  el  comando  grep,  colocando  los  dos  últimos  bytes  de  la  dirección  MAC. 
 ```
 
 _$  ssh pi@192.168.0.24_
@@ -184,12 +192,18 @@ _Conectarnos  a  nuestra  tarjeta  Raspberry  mediante  UART_
 _$  sudo  nano /boot/config.txt_
 
 ```
-Habilitamos  el  mini-UART  de  la  tarjeta  RaspberryPi  3,  esto  lo  hacemos  en  el archivo  de  configuración  para  el  kernel
+Habilitamos  el  mini-UART  de  la  tarjeta  RaspberryPi  3,  esto  lo  hacemos  en  
+
+el archivo  de  configuración  para  el  kernel
 ```
 _enable_uart=1 core_freq=250_
 
 ```
-Agregamos  al  final  las  sentencias  de  habilitación  del  mini-UART  y  la  configuración  de  su oscilador  de  250  Mhz  para  el  cálculo  de  la  velocidad  de  transmisión  en  baudios.
+Agregamos  al  final  las  sentencias  de  habilitación  del  mini-UART  y  la  
+
+configuración  de  su oscilador  de  250  Mhz  para  el  cálculo  de  la  
+
+velocidad  de  transmisión  en  baudios.
 ```
 * ** Conetamos nuesto módulo a la Raspberry 
 ![alt tag](terminal.JPG)
@@ -212,7 +226,9 @@ Nos agregamos al grupo dialout
 _$  screen  /dev/cu.usbserial-00000000  115200_
 
 ```
-Se usa para conectar nuestra computadora personal con GNU screen, especificando a que dipositivo nos vamos a conectar y a que velocidad
+Se usa para conectar nuestra computadora personal con GNU screen, especificando a que 
+
+dipositivo nos vamos a conectar y a que velocidad.
 ```
 _$  sudo  reboot_
 
