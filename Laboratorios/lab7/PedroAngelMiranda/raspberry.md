@@ -4,7 +4,7 @@
 
 ###Título: Uso de las RaspberryPi 3.<h3>
 
-										Alumnos: 
+								 Alumnos: 
 							Angel Miranda Pedro.
 							Gonzale Ambris Luis Angel.
 							Materia:  Embedded Systems.
@@ -26,18 +26,23 @@ SSH
 
 Para verificar la  lista  de  servicios  disponible  y  su  estado ejecutamos los comandos siguientes podrás  observar  que  el  servicio  esta  activo  por  lo  que  ya se inicializo  .
 --sudo  systemctl  status  ssh
+
 ![GitHub Logo](imagenes/2018-10-08-140329_640x480_scrot.png)
+
 --sudo  systemctl  start  ssh
 
 
 ![GitHub Logo](imagenes/2018-10-08-140418_640x480_scrot.png)
 
 --sudo  systemctl  enable  ssh
+
 ![GitHub Logo](imagenes/2018-10-08-140443_640x480_scrot.png)
 
 
 Verifica  el  nombre  de  la  interfaz  de  red  inalámbrica  en  tu  raspberry  y  anota  la  dirección  MAC.Ejecuta  el  comando:
+
 --ifconfig
+
 ![GitHub Logo](imagenes/2018-10-15-092658_640x480_scrot.png)
 
 
