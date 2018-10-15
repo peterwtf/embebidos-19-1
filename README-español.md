@@ -4,32 +4,47 @@
 ## EMBEDDED SYSTEMS
 ## _Reporte RaspberryPi 3_ 
 
+![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
+
+
 ### Pre-requisitos 📋
 
-_Que cosas necesitas para instalar el software y como instalarlas_
+_Memoria  micro  SD  clase  10  de  almenos  8Gb_
+
+_Cargar sistema operativo_
 
 ```
-![alt text](https://github.com/MikeyMcDon/embebidos-19-1/14643-Raspberry_Pi_3_B_-05.jpg)
-![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
+ Sistema  operativo  Raspbian  Stretch  de  4.9  Gb
 ```
-
 ### Instalación 🔧
 
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
+_Insertamos la memoria a la computadora_
 
-_Dí cómo será ese paso_
+_Ejecutamos una serie de comandos para montar el Sistema Operativo_
 
-```
-Da un ejemplo
-```
-
-_Y repite_
+_$  lsblk_
 
 ```
-hasta finalizar
+Verificamos  el  nombre  de  dispositivo  asignado  ala  memoria,  así  como  las  particiones.
 ```
 
-_Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
+_$  sudo  umount  /dev/sdc1_
+
+```
+Desmontamos todas las  particiones  de  nuestra  memoria  SD.
+```
+_$  sudo  dd  bs=4M  if=2017-11-29-raspbian-stretch.img  of=/dev/sdc  conv=sync_
+
+```
+Hacemos  la  copia  de  la  imagen  del  sistema  operativo  a  la  memoria  micro  SD.
+```
+_$  sync_
+
+```
+  Limpiamos  la  memoria  cache  para  desmontar  la  memoria  micro  SD
+```
+
+_Para este  modo  de  operación  conectamos un monitor mediante  una  cable  HDMI,  un teclado  y un ratón.  Después  conectamos  el  eliminador  y  esperamos  al  arranque  del sistema  operativo._
 
 ## RaspberryPi 3 como computadora de escritorio. 🚀
 
