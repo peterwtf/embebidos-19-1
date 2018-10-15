@@ -71,9 +71,14 @@ Reiniciamos nuestro sistema.
 
 _Explica como ejecutar las pruebas automatizadas para este sistema_
 
-### Capturas del proceso 🔩
+```
+Da un ejemplo
+```
 
-![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
+### Capturas de resultado 🔩
+
+![alt tag](hostname.jpg)
+![alt tag](ssh.jpg)
 
 ## RaspberryPi  3  mediante  VNC ⌨️
 
@@ -85,8 +90,9 @@ Da un ejemplo
 
 ### Capturas del proceso 📦
 
-![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
-
+![alt tag](dev115.jpg)
+![alt tag](tty.jpg)
+![alt tag](general.jpg)
 
 ## Autores ✒️📌
 
