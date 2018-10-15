@@ -91,7 +91,7 @@ Da un ejemplo
 ### Capturas del proceso 📦
 
 ![alt tag](dev115.jpg)
-![alt tag](tty.jpg)
+![alt tag](tty0.jpg)
 ![alt tag](general.jpg)
 
 ## Autores ✒️📌
