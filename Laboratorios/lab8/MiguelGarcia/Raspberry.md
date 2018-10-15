@@ -100,11 +100,13 @@ $ ls -l /dev/ttyUSB0
 $sudo usermod -a -G dialout "$(whoami)"  
 $ sudo screen/dev/ttyUSB0 115200  
 
-![alt tag](6comcpu.jpg)  
+![alt tag](6comcpu.png)  
 
 Al resetear la Raspberry:  
 
-![alt tag](6uart.jpg)  
+![alt tag](6uart.png)  
+
+Raspberry Pi 3B+
 
 
 
