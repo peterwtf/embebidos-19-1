@@ -6,7 +6,6 @@
 
 ![alt tag](14643-Raspberry_Pi_3_B_-05.jpg)
 
-
 ### Pre-requisitos 📋
 
 _Memoria  micro  SD  clase  10  de  almenos  8Gb_
@@ -101,3 +100,5 @@ Da un ejemplo
 
 
 ## Victor Hugo García Ortega ❤️⌨️ 
+
+* **Profesor** [Victor Hugo García Ortega](https://github.com/vgarciaortega)
