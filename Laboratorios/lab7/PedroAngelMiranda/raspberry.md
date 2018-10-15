@@ -1,8 +1,8 @@
-							#INSTITUTO POLITECNICO NACIONAL.<h1>
-							##ESCUELA SUPERIOR DE CÓMPUTO.<h2>
+#INSTITUTO POLITECNICO NACIONAL.<h1>
+##ESCUELA SUPERIOR DE CÓMPUTO.<h2>
 
 
-							###Título: Uso de las RaspberryPi 3.<h3>
+###Título: Uso de las RaspberryPi 3.<h3>
 
 										Alumnos: 
 							Angel Miranda Pedro.
@@ -34,6 +34,7 @@ Para verificar la  lista  de  servicios  disponible  y  su  estado ejecutamos lo
 
 --sudo  systemctl  enable  ssh
 ![GitHub Logo](imagenes/2018-10-08-140443_640x480_scrot.png)
+
 
 Verifica  el  nombre  de  la  interfaz  de  red  inalámbrica  en  tu  raspberry  y  anota  la  dirección  MAC.Ejecuta  el  comando:
 --ifconfig
