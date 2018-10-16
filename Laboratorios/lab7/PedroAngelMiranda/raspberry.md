@@ -4,14 +4,15 @@ ESCUELA SUPERIOR DE CÓMPUTO.<h2>
 
 Título: Uso de las RaspberryPi 3.<h3>
 
-								 Alumnos: 
-							Angel Miranda Pedro.
-							Gonzale Ambris Luis Angel.
-							Materia:  Embedded Systems.
+							 Alumnos: 
+					Angel Miranda Pedro.
+					Gonzale Ambris Luis Angel.
+		
+					Materia:  Embedded Systems.
 
-							Grupo: 4CM3.
+					Grupo: 4CM3.
 
-							Profesor: García Ortega Víctor Hugo.
+					Profesor: García Ortega Víctor Hugo.
 
 
 
